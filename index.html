@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watchlist</title>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .watchlist {
+            width: 250px;
+            background: #f4f4f4;
+            padding: 10px;
+            border-left: 2px solid #ccc;
+        }
+        .stock-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+        button {
+            cursor: pointer;
+            padding: 5px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-content">
+        <h2>Stock Market Data</h2>
+        <div id="stock-container"></div>
+    </div>
+
+    <div class="watchlist">
+        <h3>Watchlist</h3>
+        <div id="watchlist-container"></div>
+    </div>
+
+    <script>
+        const stocks = [
+            { id: 1, name: "AAPL", price: 150 },
+            { id: 2, name: "GOOGL", price: 2800 },
+            { id: 3, name: "AMZN", price: 3400 },
+            { id: 4, name: "MSFT", price: 299 },
+            { id: 5, name: "TSLA", price: 700 }
+        ];
+
+        const stockContainer = document.getElementById("stock-container");
+        const watchlistContainer = document.getElementById("watchlist-container");
+
+        let watchlist = [];
+
+        function renderStocks() {
+            stockContainer.innerHTML = "";
+            stocks.forEach(stock => {
+                const stockDiv = document.createElement("div");
+                stockDiv.classList.add("stock-item");
+                stockDiv.innerHTML = `
+                    <span>${stock.name}: $${stock.price}</span>
+                    <button onclick="addToWatchlist(${stock.id})">+</button>
+                `;
+                stockContainer.appendChild(stockDiv);
+            });
+        }
+
+        function addToWatchlist(id) {
+            const stock = stocks.find(s => s.id === id);
+            if (!watchlist.includes(stock)) {
+                watchlist.push(stock);
+                renderWatchlist();
+            }
+        }
+
+        function removeFromWatchlist(id) {
+            watchlist = watchlist.filter(stock => stock.id !== id);
+            renderWatchlist();
+        }
+
+        function renderWatchlist() {
+            watchlistContainer.innerHTML = "";
+            watchlist.forEach(stock => {
+                const watchDiv = document.createElement("div");
+                watchDiv.classList.add("stock-item");
+                watchDiv.innerHTML = `
+                    <span>${stock.name}: $${stock.price}</span>
+                    <button onclick="removeFromWatchlist(${stock.id})">x</button>
+                `;
+                watchlistContainer.appendChild(watchDiv);
+            });
+        }
+
+        renderStocks();
+    </script>
+
+</body>
+</html>
+
